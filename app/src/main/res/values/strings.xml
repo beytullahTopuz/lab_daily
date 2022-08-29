@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Lab_dailiy_selfi</string>
+    <string name="share_preferenses_name">MY_SP</string>
+    <string name="image">IMAGE</string>
+    <string name="text">TEXT</string>
+    <string name="myDATA">MYDATA</string>
+
+</resources>
