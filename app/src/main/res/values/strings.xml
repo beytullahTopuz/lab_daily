@@ -4,5 +4,7 @@
     <string name="image">IMAGE</string>
     <string name="text">TEXT</string>
     <string name="myDATA">MYDATA</string>
+    <string name="channel_id">CHANNEL_ID</string>
+    <string name="intent_string_transfer_id">inputExtra</string>
 
 </resources>

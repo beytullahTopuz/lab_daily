@@ -31,6 +31,7 @@ import android.view.View;
 import com.example.lab_dailiy_selfi.databinding.ActivityMainBinding;
 import com.example.lab_dailiy_selfi.helper.SharedPreferenceHelper;
 import com.example.lab_dailiy_selfi.model.PictureModel;
+import com.example.lab_dailiy_selfi.service.NotificationService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         mBinding.mListView.setLayoutManager(linearLayoutManager);
         getDATA();
+        stopNotificationService();
 
 
         RecyclerView.Adapter adapter = new RvAdapter(bitmaps, textList);
@@ -92,31 +94,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //notification test
-                Log.d("NOTIFICATION", "test108");
+                final String notificationInput = "Take a Picture!!!";
 
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
-                mBuilder.setSmallIcon(R.drawable.camera_foreground);
-                mBuilder.setContentTitle("Notification Alert, Click Me!");
-                mBuilder.setContentText("Hi, This is Android Notification Detail!");
-
-                Intent resultIntent = new Intent(getApplicationContext(), MyNotificationActivity.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-                stackBuilder.addParentStack(MyNotificationActivity.class);
-
-// Adds the Intent that starts the Activity to the top of the stack
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(resultPendingIntent);
-
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-// notificationID allows you to update the notification later on.
-                mNotificationManager.notify(1, mBuilder.build());
-
-
+                Intent serviceIntent = new Intent(MainActivity.this, NotificationService.class);
+                serviceIntent.putExtra(String.valueOf(R.string.intent_string_transfer_id),notificationInput);
+                startService(serviceIntent);
             }
         });
+
+
 
         mBinding.openCamBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
         pictureModel.setTexts(textList);
         SharedPreferenceHelper.getINSTANCE(MainActivity.this).writeDATA(String.valueOf(R.string.myDATA),
                 pictureModel.modelToString());
+    }
+
+    private void stopNotificationService(){
+
+        Intent serviceIntent = new Intent(MainActivity.this, NotificationService.class);
+        stopService(serviceIntent);
     }
 
 
